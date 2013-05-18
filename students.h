@@ -3,14 +3,15 @@
 //assignment 2
 //students.h
 #include <vector>
-#include <fstream>
-
+#include <string>
+#include <iostream>
 class Students
 {
 public:
   Students();
   ~Students();
-  void parse_students(std::ifstream&);
+  void parse_students();
+  friend void operator<<(std::ostream&, Students& students);
 
 
 private:
