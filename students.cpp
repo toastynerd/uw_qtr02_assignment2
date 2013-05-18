@@ -5,9 +5,11 @@
 #include "students.h"
 #include <sstream>
 #include <fstream>
+#include <cstdlib>
 
 Students::Students()
 {
+  srand(time(NULL));
 
 }
 
@@ -51,6 +53,7 @@ void Students::parse_students()
       my_student_names.push_back(ss.str());
       ss.clear();
       ss.str("");
+      my_student_ids.push_back(get_new_student_id());
     }
 
     else if(ch == '\n')
@@ -64,6 +67,32 @@ void Students::parse_students()
     }
     // std::cout << ch << std::endl;
   }
+}
+
+int Students::get_new_student_id()
+{
+  int the_int = 0;
+  while(true)
+  {
+    the_int = rand() % 1000;
+    if(check_id_unique(the_int))
+    {
+      break;
+    }
+  }
+  return the_int;
+}
+
+bool Students::check_id_unique(int student_id)
+{
+  for(int x =0;x<my_student_ids.size();x++)
+  {
+    if(student_id == my_student_ids[x])
+    {
+      return false;
+    }
+  }
+  return true;
 }
 
 void operator<< (std::ostream& os, Students& students)

@@ -17,4 +17,6 @@ public:
 private:
   std::vector <std::string> my_student_names;
   std::vector <int> my_student_ids;
+  int get_new_student_id();
+  bool check_id_unique(int);
 };
