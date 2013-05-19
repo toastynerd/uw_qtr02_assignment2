@@ -1,25 +1,21 @@
-//Tyler Morgan
-//uw c++ class
-//assignment 2
-//students.cpp
-#include "students.h"
-#include <sstream>
-#include <fstream>
+#include "student_list.h"
 #include <cstdlib>
-
-Students::Students()
+#include <sstream>
+StudentList::StudentList()
 {
   srand(time(NULL));
 
 }
 
-Students::~Students()
+StudentList::~StudentList()
 {
 
 }
 
-void Students::parse_students()
+void StudentList::parse_students()
 {
+  std::string name = "";
+  int student_id = 0;
   std::ifstream readFile;
   readFile.open("students.txt");
   std::stringstream ss;
@@ -29,10 +25,9 @@ void Students::parse_students()
     readFile.get(ch);
     if(ch == ';')
     {
-      my_student_names.push_back(ss.str());
+      name = ss.str();
       ss.clear();
       ss.str("");
-      int student_id = 0;
       while(!readFile.eof())
       {
         readFile.get(ch);
@@ -43,17 +38,19 @@ void Students::parse_students()
         ss << ch;
       }
       ss >> student_id;
-      my_student_ids.push_back(student_id);
+      Student temp_student(name,student_id);
+      my_student_list.push_back(temp_student);
       ss.clear();
       ss.str("");
     }
     
     else if(ch == ',')
     {
-      my_student_names.push_back(ss.str());
+      name = ss.str();
       ss.clear();
       ss.str("");
-      my_student_ids.push_back(get_new_student_id());
+      student_id = get_new_student_id();
+      //put a new student here
     }
 
     else if(ch == '\n')
@@ -69,7 +66,7 @@ void Students::parse_students()
   }
 }
 
-int Students::get_new_student_id()
+int StudentList::get_new_student_id()
 {
   int the_int = 0;
   while(true)
@@ -83,23 +80,23 @@ int Students::get_new_student_id()
   return the_int;
 }
 
-bool Students::check_id_unique(int student_id)
+bool StudentList::check_id_unique(int student_id)
 {
-  for(int x =0;x<my_student_ids.size();x++)
-  {
-    if(student_id == my_student_ids[x])
-    {
-      return false;
-    }
-  }
+  // for(int x =0;x<my_student_ids.size();x++)
+  // {
+  //   if(student_id == my_student_ids[x])
+  //   {
+  //     return false;
+  //   }
+  // }
   return true;
 }
 
-void operator<< (std::ostream& os, Students& students)
+void operator<<(std::ostream& os, StudentList& students)
 {
-  os << "Students: " << std::endl;
-  for(int x = 0;x<students.my_student_names.size();x++)
+  os << "Students:" <<std::endl;
+  for(int x =0;x<students.my_student_list.size();x++)
   {
-    os << students.my_student_names[x] << " id#: " << students.my_student_ids[x] << std::endl;
+    os << students.my_student_list.at(x) << std::endl; //can't get this line to work
   }
 }
